@@ -16,6 +16,14 @@ Component({
       type: Number,
       value: 0
     },
+    color: {
+      type: String,
+      value: '#f44'
+    },
+    borderColor: {
+      type: String,
+      value: '#f44'
+    },
     list: {
       type: Array,
       value: []

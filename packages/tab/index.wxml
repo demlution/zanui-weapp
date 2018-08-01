@@ -13,7 +13,7 @@
     >
       <template
         is="zan-tab-list"
-        data="{{ list, selectedId, height }}"
+        data="{{ list, selectedId, height, color, borderColor }}"
       />
     </scroll-view>
   </block>
@@ -24,7 +24,7 @@
     >
       <template
         is="zan-tab-list"
-        data="{{ list, selectedId, height }}"
+        data="{{ list, selectedId, height, color, borderColor }}"
       />
     </view>
   </block>
@@ -43,7 +43,7 @@
   >
     <view
       class="zan-tab__title"
-      style="{{ height ? 'height:' + height + 'px;line-height:' + height + 'px' : '' }}"
+      style="{{ (height ? 'height:' + height + 'px;line-height:' + height + 'px' : '') + ';color: ' + color + ';' + 'border-color: ' + borderColor + ';' }}"
     >
       {{ item.title }}
     </view>
