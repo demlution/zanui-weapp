@@ -24,6 +24,10 @@ def convert_package():
         if os.path.exists(target_dir):
             shutil.rmtree(target_dir)
         shutil.copytree(source_dir, target_dir)
+        package_js = os.path.join(target_dir, 'package.js')
+        if not os.path.exists(package_js):
+            with open(package_js, 'w') as f:
+                f.write('export default {}\n')
 
 
 def main():
