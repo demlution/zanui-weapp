@@ -15,7 +15,8 @@
     "build": "sh scripts/deploy.sh",
     "watch:doc": "NODE_ENV=development wedoc run watch",
     "build:doc": "NODE_ENV=production wedoc run build",
-    "deploy:doc": "npm run build:doc && superman cdn basic && gh-pages -d website/dist"
+    "deploy:doc": "npm run build:doc && superman cdn basic && gh-pages -d website/dist",
+    "move": "npm run dev && python build_dwapp.py"
   },
   "repository": {
     "type": "git",
