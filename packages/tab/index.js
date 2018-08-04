@@ -16,6 +16,10 @@ Component({
     },
     color: {
       type: String,
+      value: '#666'
+    },
+    selectedColor: {
+      type: String,
       value: '#f44'
     },
     borderColor: {
