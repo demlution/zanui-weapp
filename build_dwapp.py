@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from __future__ import unicode_literals, absolute_import, print_function, division
-
 import os
 import shutil
 
@@ -14,6 +12,13 @@ def get_plugin_name(name):
     return 'plugin-comz' + name.replace('-', '')
 
 
+def transform_target_dir(target_dir):
+    package_js = os.path.join(target_dir, 'package.js')
+    if not os.path.exists(package_js):
+        with open(package_js, 'w') as f:
+            f.write('export default {}\n')
+
+
 def convert_package():
     packages = [i for i in os.listdir(DIR_DIST) if os.path.isdir(os.path.join(DIR_DIST, i))]
     for package in packages:
@@ -24,10 +29,7 @@ def convert_package():
         if os.path.exists(target_dir):
             shutil.rmtree(target_dir)
         shutil.copytree(source_dir, target_dir)
-        package_js = os.path.join(target_dir, 'package.js')
-        if not os.path.exists(package_js):
-            with open(package_js, 'w') as f:
-                f.write('export default {}\n')
+        transform_target_dir(target_dir)
 
 
 def main():

@@ -1,5 +1,5 @@
-const CELL_PATH = '../cell/index';
-const FIELD_PATH = '../field/index';
+const CELL_PATH = '../plugin-comzcell/index';
+const FIELD_PATH = '../plugin-comzfield/index';
 
 Component({
   properties: {

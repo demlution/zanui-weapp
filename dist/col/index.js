@@ -4,7 +4,7 @@ Component({
   externalClasses: ['col-class'],
 
   relations: {
-    '../row/index': {
+    '../plugin-comzrow/index': {
       type: 'parent'
     }
   },

@@ -2,8 +2,8 @@
 
 var _relations;
 
-var CELL_PATH = '../cell/index';
-var FIELD_PATH = '../field/index';
+var CELL_PATH = '../plugin-comzcell/index';
+var FIELD_PATH = '../plugin-comzfield/index';
 
 Component({
   properties: {
