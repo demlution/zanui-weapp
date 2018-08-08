@@ -1,6 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "pop-manager": "../common/pop-manager/index"
-  } 
+    "pop-manager": "../plugin-comzcommon/pop-manager/index"
+  }
 }
