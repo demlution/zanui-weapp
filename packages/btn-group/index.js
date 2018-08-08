@@ -1,6 +1,6 @@
 Component({
   relations: {
-    '../btn/index': {
+    '../plugin-comzbtn/index': {
       type: 'child',
       linked() {
         updateBtnChild.call(this);
@@ -16,7 +16,7 @@ Component({
 });
 
 function updateBtnChild() {
-  let btns = this.getRelationNodes('../btn/index');
+  let btns = this.getRelationNodes('../plugin-comzbtn/index');
 
   if (btns.length > 0) {
     let lastIndex = btns.length - 1;

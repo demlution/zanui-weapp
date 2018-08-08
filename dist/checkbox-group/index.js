@@ -2,7 +2,7 @@
 
 var _relations;
 
-var CHECKBOX_PATH = '../checkbox/index';
+var CHECKBOX_PATH = '../plugin-comzcheckbox/index';
 
 Component({
   relations: (_relations = {}, _relations[CHECKBOX_PATH] = {

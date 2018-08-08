@@ -2,7 +2,7 @@
 
 Component({
   relations: {
-    '../btn/index': {
+    '../plugin-comzbtn/index': {
       type: 'child',
       linked: function linked() {
         updateBtnChild.call(this);
@@ -18,7 +18,7 @@ Component({
 });
 
 function updateBtnChild() {
-  var btns = this.getRelationNodes('../btn/index');
+  var btns = this.getRelationNodes('../plugin-comzbtn/index');
 
   if (btns.length > 0) {
     var lastIndex = btns.length - 1;

@@ -1,4 +1,4 @@
-const CHECKBOX_PATH = '../checkbox/index';
+const CHECKBOX_PATH = '../plugin-comzcheckbox/index';
 
 Component({
   relations: {

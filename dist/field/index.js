@@ -6,7 +6,7 @@ Component({
   externalClasses: ['field-class'],
 
   relations: {
-    '../cell-group/index': {
+    '../plugin-comzcellgroup/index': {
       type: 'parent'
     }
   },

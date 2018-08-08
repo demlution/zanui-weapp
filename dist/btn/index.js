@@ -6,7 +6,7 @@ Component({
   externalClasses: ['custom-class', 'theme-class'],
   behaviors: [nativeButtonBehavior],
   relations: {
-    '../btn-group/index': {
+    '../plugin-comzbtngroup/index': {
       type: 'parent',
       linked: function linked() {
         this.setData({ inGroup: true });
