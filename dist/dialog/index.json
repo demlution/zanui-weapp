@@ -1,7 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "pop-manager": "../common/pop-manager/index",
-    "zan-button": "../btn/index"
-  } 
+    "pop-manager": "../plugin-comzcommon/pop-manager/index",
+    "zan-button": "../plugin-comzbtn/index"
+  }
 }

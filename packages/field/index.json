@@ -1,6 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "zan-cell": "../cell/index"
+    "zan-cell": "../plugin-comzcell/index"
   }
 }

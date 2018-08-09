@@ -2,7 +2,7 @@
 
 var _relations;
 
-var CHECKBOX_GROUP_PATH = '../checkbox-group/index';
+var CHECKBOX_GROUP_PATH = '../plugin-comzcheckboxgroup/index';
 
 Component({
   externalClasses: ['checkbox-class'],
