@@ -13,7 +13,7 @@ Component({
   methods: {
     radioChange: function radioChange(e) {
       this.selectItem(e.detail.value);
-      this.triggerEvent('change', e);
+      this.triggerEvent('change', e.detail.value);
     },
     selectItem: function selectItem(value) {
       var items = this.data.items;

@@ -11,7 +11,7 @@ Component({
   methods: {
     radioChange(e) {
       this.selectItem(e.detail.value)
-      this.triggerEvent('change', e)
+      this.triggerEvent('change', e.detail.value)
     },
 
     selectItem(value) {
