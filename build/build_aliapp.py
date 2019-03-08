@@ -65,7 +65,11 @@ Component = WAComponent(Component);
 
 
 def transform_html(path, filename):
-    F(path, filename).rewrite(convertor=dxml2axml).ext('axml')
+    f = F(path, filename)
+    axml, sjses = dxml2axml(f.read())
+    f.write(axml).ext('axml')
+    for name, content in sjses:
+        F(path, f'{name}.sjs').write(content)
 
 
 def transform_css(path, filename):
@@ -79,7 +83,8 @@ def pkg_exists(pkg_name):
 
 @__main__
 def convert_package():
-    packages = filter(pkg_exists, os.listdir(DIR_DIST))  # TODO: @sy 有些暂时不能支持
+    # packages = filter(pkg_exists, os.listdir(DIR_DIST))  # TODO: @sy 有些暂时不能支持
+    packages = ['select']
     for package in packages:
         plugin_name = get_plugin_name(package)
         print('{:16} ->  {:16}'.format(package, plugin_name))
