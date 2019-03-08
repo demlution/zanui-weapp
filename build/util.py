@@ -64,15 +64,20 @@ def dxml2axml(content):
     }
 
     def transform_wxs(s):
+        s = f'<f-ck-xml>{s}</f-ck-xml>'
         soup = bs4(s, 'xml')
         wxses = soup.find_all('wxs')
         for wxs in wxses:
             wxs.name = 'import-sjs'
-            wxs['name'] = wxs['module']
-            wxs['from'] = wxs['src']
-            del wxs['module']
-            del wxs['src']
-        return str(soup.view)
+            if wxs.get('module'):
+                wxs['name'] = wxs['module']
+                del wxs['module']
+            if wxs.get('src'):
+                wxs['from'] = wxs['src']
+                del wxs['src']
+
+        result = '\n'.join(getattr(soup, 'f-ck-xml').prettify().split('\n')[1:-1])
+        return result
 
     target = content
     for k, v in REPLACE_MAP.items():
