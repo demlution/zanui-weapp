@@ -90,12 +90,19 @@ def dxml2axml(content):
     for k, v in REPLACE_MAP.items():
         target = target.replace(k, v)
 
-    re.compile(r'^(bind):?(\w+)').sub(lambda m: f'on{m.group(2).capitalize()}', target)
-    re.compile(r'^(catch):?(\w+)').sub(lambda m: f'catch{m.group(2).capitalize()}', target)
+    ons = []
+    catches = []
+    pattern = re.compile(r'^(bind):?(\w+)')
+    for m in pattern.finditer(target):
+        ons.append(f'on{m.group(2).capitalize()}')
+    pattern.sub(lambda m: f'on{m.group(2).capitalize()}', target)
 
-    target = transform_wxs(target)
+    pattern = re.compile(r'^(catch):?(\w+)')
+    for m in pattern.finditer(target):
+        catches.append(f'on{m.group(2).capitalize()}')
+    pattern.sub(lambda m: f'catch{m.group(2).capitalize()}', target)
 
-    return target
+    return transform_wxs(target), (ons, catches)
 
 
 def __main__(f):

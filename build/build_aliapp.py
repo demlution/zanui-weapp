@@ -28,9 +28,16 @@ def transform_target_dir(target_dir):
         if name.endswith('.js'):
             transform_js(target_dir, name)
         elif name.endswith('.wxml'):
-            transform_html(target_dir, name)
+            ons, catches = transform_html(target_dir, name)
         elif name.endswith('.wxss'):
             transform_css(target_dir, name)
+
+    for on in ons:
+        pass
+    for catch in catches:
+        pass
+    #
+    F(target_dir, 'wa-runtime-polyfill-event.js').write('')
 
 
 def transform_js(path, filename):
@@ -66,10 +73,11 @@ Component = WAComponent(Component);
 
 def transform_html(path, filename):
     f = F(path, filename)
-    axml, sjses = dxml2axml(f.read())
+    (axml, sjses), (ons, catches) = dxml2axml(f.read())
     f.write(axml).ext('axml')
     for name, content in sjses:
         F(path, f'{name}.sjs').write(content)
+    return ons, catches
 
 
 def transform_css(path, filename):
@@ -83,8 +91,7 @@ def pkg_exists(pkg_name):
 
 @__main__
 def convert_package():
-    # packages = filter(pkg_exists, os.listdir(DIR_DIST))  # TODO: @sy 有些暂时不能支持
-    packages = ['select']
+    packages = filter(pkg_exists, os.listdir(DIR_DIST))  # TODO: @sy 有些暂时不能支持
     for package in packages:
         plugin_name = get_plugin_name(package)
         print('{:16} ->  {:16}'.format(package, plugin_name))
