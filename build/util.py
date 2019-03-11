@@ -92,15 +92,15 @@ def dxml2axml(content):
 
     ons = []
     catches = []
-    pattern = re.compile(r'^(bind):?(\w+)')
+    pattern = re.compile(r'\s(bind):?(\w+)')
     for m in pattern.finditer(target):
         ons.append(f'on{m.group(2).capitalize()}')
-    pattern.sub(lambda m: f'on{m.group(2).capitalize()}', target)
+    target = pattern.sub(lambda m: f' on{m.group(2).capitalize()}', target)
 
-    pattern = re.compile(r'^(catch):?(\w+)')
+    pattern = re.compile(r'\s(catch):?(\w+)')
     for m in pattern.finditer(target):
         catches.append(f'on{m.group(2).capitalize()}')
-    pattern.sub(lambda m: f'catch{m.group(2).capitalize()}', target)
+    target = pattern.sub(lambda m: f' catch{m.group(2).capitalize()}', target)
 
     return transform_wxs(target), (ons, catches)
 

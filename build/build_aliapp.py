@@ -24,6 +24,8 @@ def get_plugin_name(name):
 
 def transform_target_dir(target_dir):
     names = os.listdir(target_dir)
+    ons = []
+    catches = []
     for name in names:
         if name.endswith('.js'):
             transform_js(target_dir, name)
@@ -32,12 +34,30 @@ def transform_target_dir(target_dir):
         elif name.endswith('.wxss'):
             transform_css(target_dir, name)
 
+    event_polyfill = """'use strict';
+var WAComponent = require('../../components/shared/wacomponent.js');
+var Behavior = WAComponent(function Behavior (x) {{ return x }});
+
+module.exports = Behavior({});
+"""
+    events = ''
     for on in ons:
-        pass
+        events += f'    {on}: function () {{}},\n'
     for catch in catches:
-        pass
-    #
-    F(target_dir, 'wa-runtime-polyfill-event.js').write('')
+        events += f'    {catch}: function () {{}}, \n'
+    if events:
+        events = '\n'.join(filter(bool, events.split('\n')))
+        event_polyfill = f"""'use strict';
+var WAComponent = require('../../components/shared/wacomponent.js');
+var Behavior = WAComponent(function Behavior (x) {{ return x }});
+
+module.exports = Behavior({{
+  properties: {{
+{events}
+  }}
+}});
+"""
+    F(target_dir, 'wa-polyfill-runtime-event.js').write(event_polyfill)
 
 
 def transform_js(path, filename):
@@ -50,7 +70,9 @@ var Behavior = WAComponent(function Behavior (x) { return x });
 """
     component_factory = """
 var WAComponent = require('../../components/shared/wacomponent.js');
-Component = WAComponent(Component);
+var triggerPolyfill = require('../../components/shared/wa-polyfill-trigger.js');
+var eventPolyfill = require('./wa-polyfill-runtime-event.js');
+Component = WAComponent(Component, [triggerPolyfill, eventPolyfill]);
 """
     factory = component_factory if filename == 'index.js' else behavior_factory
 
