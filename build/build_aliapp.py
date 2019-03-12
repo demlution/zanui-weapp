@@ -3,7 +3,7 @@
 import os
 import shutil
 
-from util import F, __main__, dxml2axml
+from util import F, __main__, dxml2axml, catchEvents
 
 
 __doc__ = """
@@ -30,19 +30,21 @@ def get_plugin_name(name):
 def transform_target_dir(target_dir, depth=2):
     names = os.listdir(target_dir)
     ons = []
-    catches = []
     root = '../' * depth
     for name in names:
         if name.endswith('.js'):
             transform_js(target_dir, name, root)
+            ons += catchEvents(F(target_dir, name).content)
         elif name.endswith('.wxml'):
-            ons, catches = transform_html(target_dir, name)
+            transform_html(target_dir, name)
         elif name.endswith('.wxss'):
             transform_css(target_dir, name)
         elif name.endswith('.json'):
             continue
         elif F(target_dir, name).isdir:
             transform_target_dir(os.path.join(target_dir, name), depth + 1)
+
+    ons = list(set(ons))
 
     event_polyfill = f"""'use strict';
 var WAComponent = require('{root}components/shared/wacomponent.js');
@@ -53,8 +55,6 @@ module.exports = Behavior({{}});
     events = ''
     for on in ons:
         events += f'    {on}: function () {{}},\n'
-    for catch in catches:
-        events += f'    {catch}: function () {{}}, \n'
     if events:
         events = '\n'.join(filter(bool, events.split('\n')))
         event_polyfill = f"""'use strict';
@@ -102,11 +102,10 @@ Component = WAComponent(Component, [triggerPolyfill, eventPolyfill]);
 
 def transform_html(path, filename):
     f = F(path, filename)
-    (axml, sjses), (ons, catches) = dxml2axml(f.content)
+    axml, sjses = dxml2axml(f.content)
     f.write(axml).ext('axml')
     for name, content in sjses:
         F(path, f'{name}.sjs').write(content)
-    return ons, catches
 
 
 def transform_css(path, filename):

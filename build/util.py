@@ -108,7 +108,14 @@ def dxml2axml(content):
         catches.append(f'on{m.group(2).capitalize()}')
     target = pattern.sub(lambda m: f' catch{m.group(2).capitalize()}', target)
 
-    return transform_wxs(target), (ons, catches)
+    return transform_wxs(target)
+
+
+def catchEvents(content):
+    pattern = re.compile(r'\.triggerEvent\(\'(\w+)\'')
+    def de_group(match):
+        return f'on{match.group(1).capitalize()}'
+    return list(map(de_group, pattern.finditer(content)))
 
 
 def __main__(f):
