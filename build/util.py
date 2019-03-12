@@ -8,10 +8,11 @@ from bs4 import BeautifulSoup as bs4
 
 class F():
     """ file proxy wrapper """
-    def __init__(self, path, name=None):
+    def __init__(self, path, name=None, mode='t'):
         if name is not None:
             path = os.path.join(path, name)
         self.path = path
+        self.mode = mode  # t/b
 
     @property
     def exists(self):
@@ -21,19 +22,23 @@ class F():
     def isdir(self):
         return os.path.isdir(self.path)
 
-    def read(self):
-        """ unlinkable """
-        with open(self.path, 'r') as f:
+    @property
+    def content(self):
+        with open(self.path, f'r{self.mode}') as f:
             return f.read()
 
     def write(self, content):
-        with open(self.path, 'w') as f:
+        with open(self.path, f'w{self.mode}') as f:
             f.write(content)
         return self
 
     def unshift(self, content):
-        _content = cls.read(self.path)
-        cls.write(self.path, content + _content)
+        self.write(content + self.content)
+        return self
+
+    def append(self, content):
+        with open(self.path, f'a{self.mode}') as f:
+            f.write(content)
         return self
 
     def ext(self, _ext):
@@ -44,10 +49,11 @@ class F():
         return self
 
     def rewrite(self, *, content=None, convertor=None):
-        if content is not None:
-            self.write(content)
-        elif convertor is not None:
-            self.write(convertor(self.read()))
+        if content is None:
+            content = self.content
+        if convertor is not None:
+            content = convertor(content)
+        self.write(content)
         return self
 
 
