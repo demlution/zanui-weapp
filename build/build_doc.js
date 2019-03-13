@@ -3,6 +3,8 @@
  * 先编译到ali小程序以后再跑这个脚本
  * 会编译出 props 和 events 在 node_modules/@doc/<组件名>.doc.html
  */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable space-before-function-paren */
 /* eslint-disable semi, global-require, import/no-dynamic-require, arrow-parens, prefer-destructuring */
 
 const fs = require('fs')
@@ -18,7 +20,13 @@ const DIST = path.resolve(__dirname, '../dist')
 const BUILT = path.resolve(__dirname, '../../bazaar4/dwapp/defaultaliapp/pages')
 const TARGET = path.resolve(__dirname, '../node_modules/@doc')
 
-async function main() {
+async function asyncForEach (array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
+
+async function main () {
   const packages = await readdir(DIST)
   const td = v => `<td>${v === undefined ? '' : v}</td>`
   // console.log(packages)
@@ -40,25 +48,30 @@ async function main() {
     Object.keys(options.properties || {}).forEach(key => {
       const prop = options.properties[key]
       let type = (prop.type || __undefined).toString()
-      let value = prop.value
+      let value = prop.value === undefined ? prop.toString() : prop.value
       if (type === 'undefined' && types.includes(value)) {
         type = value
         value = 'undefined'
       }
-      currentComponent += `<tr>${td(type)}${td(value)}${td()}</tr>\n`
+      type = String(type)
+      value = String(value)
+      if (type === undefined || type === 'undefined') {
+        type === '?'
+      }
+      if (value === undefined || value === '[object Object]') {
+        value = ''
+      }
+      currentComponent += `<tr>${td(key)}${td(type)}${td(value)}</tr>\n`
     })
-    console.log(currentComponent)
   })
   global.Behavior = Component
 
-  packages.forEach(async pkg => {
-    console.log('pkg', pkg)
+  asyncForEach(packages, async pkg => {
     const file = path.resolve(DIST, pkg, 'index.js')
     if (!(await exists(file))) return
     await require(file)
 
     const event = path.resolve(BUILT, `plugin-comz${pkg}`, 'wa-polyfill-runtime-event.js')
-    console.log('x', path.resolve(BUILT, `plugin-comz${pkg}`, 'wa-polyfill-runtime-event.js'))
     if (await exists(event)) {
       const deCapitalize = s => s.trim().replace(/on([A-Z])/, (match, p1) => p1.toLowerCase())
       const events = (await readFile(event, 'utf8'))
@@ -70,10 +83,8 @@ async function main() {
     }
 
     const doc = path.resolve(TARGET, `${pkg}.doc.html`)
-    console.log('doc', doc)
     await writeFile(doc, currentComponent)
   })
 }
 
-
-main()
+fs.rmdir(TARGET, () => fs.mkdir(TARGET, main))

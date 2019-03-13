@@ -46,6 +46,17 @@ class F():
             _ext = f'.{_ext}'
         path = f'{os.path.splitext(self.path)[0]}{_ext}'
         os.rename(self.path, path)
+        self.path = path
+        return self
+
+    def rename(self, name):
+        path, _ = os.path.split(self.path)
+        _, ext = os.path.splitext(self.path)
+        if ext:
+            name += ext
+        path = os.path.join(path, name)
+        os.rename(self.path, path)
+        self.path = path
         return self
 
     def rewrite(self, *, content=None, convertor=None):
