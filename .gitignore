@@ -10,3 +10,5 @@ assets/icons/build
 assets/icons/svg
 example/dist
 website/dist
+
+*.pyc
